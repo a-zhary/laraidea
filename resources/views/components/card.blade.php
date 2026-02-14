@@ -1,18 +1,13 @@
 @props([
-    'href' => null
+    'is' => 'a'
 ])
 
 @php
     $classes = 'border border-border rounded-lg bg-card p-4 md:text-sm';
 @endphp
 
-@if($href)
-    <a href="{{ $href }}" {{ $attributes->merge(['class' => $classes]) }}>
-        {{ $slot }}
-    </a>
-@else
-    <div {{ $attributes->merge(['class' => $classes]) }}>
-        {{ $slot }}
-    </div>
-@endif
+
+<{{$is}} {{ $attributes->merge(['class' => $classes]) }}>
+    {{ $slot }}
+</{{$is}}>
 

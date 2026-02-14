@@ -32,7 +32,7 @@
                 <div class="text-muted-foreground text-sm">{{ $idea->created_at->diffForHumans() }}</div>
             </div>
 
-            <x-card class="mt-6">
+            <x-card class="mt-6" is="div">
                 <div class="text-foreground max-w-none cursor-pointer">{{ $idea->description }}</div>
             </x-card>
 
