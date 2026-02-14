@@ -20,7 +20,8 @@
                 <span class="text-xs pl-3">{{ $statusCounts->get('all') }}</span>
             </a>
             @foreach($statuses as $status)
-                <a href="{{ route('ideas.index', ['status' => $status->value]) }}" class="btn {{ request('status') === $status->value ? '' : 'btn-outlined' }}">
+                <a href="{{ route('ideas.index', ['status' => $status->value]) }}"
+                   class="btn {{ request('status') === $status->value ? '' : 'btn-outlined' }}">
                     {{ $status->label() }}
                     <span class="text-xs pl-3">{{ $statusCounts->get($status->value) }}</span>
                 </a>
@@ -50,8 +51,55 @@
             </div>
         </div>
 
-<x-modal name="create-idea" title="New Idea">
-    <p>Slot</p>
-</x-modal>
+        <x-modal name="create-idea" title="New Idea">
+            <form x-data="{status: 'pending'}" action="{{ route('ideas.store') }}" method="POST">
+                @csrf
+
+                <div class="space-y-6">
+                    <x-form.field
+                        name="title"
+                        label="title"
+                        placeholder="Enter title for your idea"
+                        required
+                        autofocus/>
+
+                    <x-form.error name="title" />
+
+                    <div class="space-y-2">
+                        <label for="status" class="label">Status</label>
+
+                        <div class="flex gap-x-3">
+                            @foreach($statuses as $status)
+                                <button
+                                    type="button"
+                                    @click="status = @js($status->value)"
+                                    class="btn flex-1 h-10"
+                                    :class="{'btn-outlined': status !== @js($status->value) }"
+                                >
+                                    {{ $status->label() }}
+                                </button>
+                            @endforeach
+
+                            <input type="hidden" name="status" :value="status" class="input">
+                        </div>
+                        <x-form.error name="status" />
+                    </div>
+
+                    <x-form.field
+                        label="description"
+                        name="description"
+                        type="textarea"
+                        placeholder="Describe your idea..."
+                    />
+
+                    <div class="flex justify-end gap-x-5">
+                        <button @click="$dispatch('close-modal')" type="button">Cancel</button>
+                        <button type="submit" class="btn">Create</button>
+                    </div>
+
+                </div>
+
+            </form>
+        </x-modal>
     </div>
 </x-layout>
