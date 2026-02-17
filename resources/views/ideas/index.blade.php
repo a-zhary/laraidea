@@ -56,7 +56,9 @@
                 x-data="{
                     status: 'pending',
                     newLink: '',
-                    links: []
+                    links: [],
+                    newStep: '',
+                    steps: []
                 }"
                 action="{{ route('ideas.store') }}"
                 method="POST">
@@ -100,13 +102,57 @@
                     />
 
                     <div>
-                        <fieldset class="space-y-3">
+                        <fieldset class="space-y-2">
+                            <legend class="label">Actionable Steps</legend>
+
+
+                            <template x-for="(step, index) in steps" :key="step">
+                                <div class="flex gap-x-2 items-center">
+                                    <input name="steps[]" x-model="step" class="input flex-1" readonly />
+
+                                    <button
+                                        type="button"
+                                        @click="steps.splice(index, 1)"
+                                        aria-label="Remove link button"
+                                        class="form-muted-icon"
+                                    >
+                                        <x-icons.trash/>
+                                    </button>
+                                </div>
+
+                            </template>
+
+                            <div class="flex gap-x-2 items-center">
+                                <input
+                                    x-model="newStep"
+                                    type="text"
+                                    id="new-step"
+                                    placeholder="What needs to be done"
+                                    class="input flex-1"
+                                    spellcheck="false"
+                                >
+                                <button
+                                    type="button"
+                                    @click="steps.push(newStep.trim()); newStep=''"
+                                    :disabled="newStep.trim().length === 0"
+                                    aria-label="Add a new step button"
+                                    class="form-muted-icon"
+                                >
+                                    <x-icons.plus/>
+                                </button>
+                            </div>
+                        </fieldset>
+                    </div>
+
+
+                    <div>
+                        <fieldset class="space-y-2">
                             <legend class="label">Links</legend>
 
 
                             <template x-for="(link, index) in links" :key="link">
                                 <div class="flex gap-x-2 items-center">
-                                    <input name="links[]" x-model="link" class="input flex-1" disabled />
+                                    <input name="links[]" x-model="link" class="input flex-1" readonly />
 
                                     <button
                                         type="button"
@@ -131,7 +177,7 @@
                                 >
                                 <button
                                     type="button"
-                                    @click="links.push(newLink); newLink=''"
+                                    @click="links.push(newLink.trim()); newLink=''"
                                     :disabled="newLink.trim().length === 0"
                                     aria-label="Add a new link button"
                                     class="form-muted-icon"
