@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Actions\CreateIdea;
-use App\Http\Requests\StoreIdeaRequest;
-use App\Http\Requests\UpdateIdeaRequest;
+use App\Actions\UpdateIdea;
+use App\Http\Requests\IdeaRequest;
 use App\IdeaStatus;
 use App\Models\Idea;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class IdeaController extends Controller
@@ -52,9 +53,9 @@ class IdeaController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreIdeaRequest $request): RedirectResponse
+    public function store(IdeaRequest $request, CreateIdea $action): RedirectResponse
     {
-        (new CreateIdea)->handle($request->safe()->all());
+        $action->handle($request->safe()->all());
 
         return to_route('ideas.index')->with('success', 'Idea created');
     }
@@ -64,6 +65,8 @@ class IdeaController extends Controller
      */
     public function show(Idea $idea)
     {
+        Gate::authorize('work-with', $idea);
+
         return view('ideas.show', [
             'idea' => $idea,
         ]);
@@ -74,15 +77,19 @@ class IdeaController extends Controller
      */
     public function edit(Idea $idea): void
     {
-        //
+        Gate::authorize('work-with', $idea);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateIdeaRequest $request, Idea $idea): void
+    public function update(IdeaRequest $request, Idea $idea, UpdateIdea $action)
     {
-        //
+        Gate::authorize('work-with', $idea);
+
+        $action->handle($request->safe()->all(), $idea);
+
+        return back()->with('success', 'Idea updated');
     }
 
     /**
@@ -90,6 +97,7 @@ class IdeaController extends Controller
      */
     public function destroy(Idea $idea): RedirectResponse
     {
+        Gate::authorize('work-with', $idea);
 
         $idea->delete();
 

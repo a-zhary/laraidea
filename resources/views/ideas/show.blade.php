@@ -9,7 +9,10 @@
             </a>
 
             <div class="gap-x-3 flex items-center">
-                <button class="btn btn-outlined">
+                <button
+                    x-data
+                    class="btn btn-outlined" data-test="edit-idea-button"
+                    @click="$dispatch('open-modal', 'edit-idea')">
                     <x-icons.external/>
                     Edit
                 </button>
@@ -39,9 +42,11 @@
                 <div class="text-muted-foreground text-sm">{{ $idea->created_at->diffForHumans() }}</div>
             </div>
 
-            <x-card class="mt-6" is="div">
-                <div class="text-foreground max-w-none cursor-pointer">{{ $idea->description }}</div>
-            </x-card>
+            @if($idea->description)
+                <x-card class="mt-6" is="div">
+                    <div class="text-foreground max-w-none cursor-pointer">{{ $idea->description }}</div>
+                </x-card>
+            @endif
 
             @if($idea->steps->count())
                 <div>
@@ -53,8 +58,12 @@
                                     @csrf
                                     @method('PATCH')
                                     <div class="flex items-center gap-x-3">
-                                        <button type="submit" role="checkbox" class="size-5 flex items-center justify-center rounded-lg text-primary-foreground {{ $step->completed ? 'bg-primary' : 'border border-primary' }}">&check;</button>
-                                        <span class="{{ $step->completed ? 'line-through text-muted-foreground' : '' }}">{{ $step->description }}</span>
+                                        <button type="submit" role="checkbox"
+                                                class="size-5 flex items-center justify-center rounded-lg text-primary-foreground {{ $step->completed ? 'bg-primary' : 'border border-primary' }}">
+                                            &check;
+                                        </button>
+                                        <span
+                                            class="{{ $step->completed ? 'line-through text-muted-foreground' : '' }}">{{ $step->description }}</span>
                                     </div>
                                 </form>
                             </x-card>
@@ -77,5 +86,6 @@
                 </div>
             @endif
         </div>
+        <x-idea.modal :idea="$idea"/>
     </div>
 </x-layout>
