@@ -11,6 +11,7 @@
             @endguest
 
             @auth
+                    <a href="/profile/edit">Edit Profile</a>
                 <form action="/logout" method="POST">
                     @csrf
                     <button class="btn btn-outlined">Logout</button>

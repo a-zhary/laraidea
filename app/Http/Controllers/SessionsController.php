@@ -41,6 +41,6 @@ class SessionsController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('success', 'You are now logged out');
+        return redirect()->intended(route('ideas.index'))->with('success', 'You are now logged out');
     }
 }

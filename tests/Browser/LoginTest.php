@@ -9,7 +9,7 @@ it('login a user', function () {
         ->fill('email', $user->email)
         ->fill('password', 'password')
         ->submit()
-        ->assertPathIs('/');
+        ->assertRoute('ideas.index');
 
     $this->assertAuthenticated();
 });
@@ -21,7 +21,7 @@ it('logout a user', function () {
         ->fill('email', $user->email)
         ->fill('password', 'password')
         ->submit()
-        ->assertPathIs('/')
+        ->assertRoute('ideas.index')
         ->click('Logout');
 
     $this->assertGuest();

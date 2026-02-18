@@ -21,11 +21,11 @@ it('edit an existing idea', function () {
         ->assertRoute('ideas.show', [$idea]);
 
     expect($idea = $user->ideas()->first())->toMatchArray([
-        'title'       => 'Some Example Title',
-        'status'      => 'completed',
+        'title' => 'Some Example Title',
+        'status' => 'completed',
         'description' => 'An example description',
-        'links'       => [$idea->links[0], 'https://laracasts.com'],
+        'links' => [$idea->links[0], 'https://laracasts.com'],
     ])
-    ->and($idea->steps)->toHaveCount(1);
+        ->and($idea->steps)->toHaveCount(1);
 
 });

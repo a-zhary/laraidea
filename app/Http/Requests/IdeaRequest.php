@@ -27,15 +27,15 @@ class IdeaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'               => ['required', 'string', 'max:255'],
-            'description'         => ['nullable', 'string'],
-            'status'              => ['required', Rule::enum(IdeaStatus::class)],
-            'links'               => ['nullable', 'array'],
-            'links.*'             => ['url', 'max:255'],
-            'steps'               => ['nullable', 'array'],
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'status' => ['required', Rule::enum(IdeaStatus::class)],
+            'links' => ['nullable', 'array'],
+            'links.*' => ['url', 'max:255'],
+            'steps' => ['nullable', 'array'],
             'steps.*.description' => ['string', 'max:1000'],
-            'steps.*.completed'   => ['boolean'],
-            'image'               => ['nullable', 'image', 'max:5120'],
+            'steps.*.completed' => ['boolean'],
+            'image' => ['nullable', 'image', 'max:5120'],
         ];
     }
 }
