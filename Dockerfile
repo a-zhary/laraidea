@@ -68,6 +68,8 @@ FROM php:8.4-fpm-alpine AS production
 
 WORKDIR /var/www/html
 
+ENV DB_DATABASE=/var/www/html/database/database.sqlite
+
 RUN apk add --no-cache \
     libpng-dev \
     oniguruma-dev \
