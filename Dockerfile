@@ -44,10 +44,10 @@ RUN apk add --no-cache \
     curl \
     libpng-dev \
     oniguruma-dev \
-    postgresql-dev \
+    sqlite-dev \
     zip \
     unzip \
-    && docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd \
+    && docker-php-ext-install pdo pdo_sqlite mbstring exif pcntl bcmath gd \
     && rm -rf /var/cache/apk/*
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
@@ -71,9 +71,9 @@ WORKDIR /var/www/html
 RUN apk add --no-cache \
     libpng-dev \
     oniguruma-dev \
-    postgresql-dev \
+    sqlite-dev \
     curl \
-    && docker-php-ext-install pdo pdo_pgsql pgsql mbstring exif pcntl bcmath gd \
+    && docker-php-ext-install pdo pdo_sqlite mbstring exif pcntl bcmath gd \
     && rm -rf /var/cache/apk/*
 
 RUN addgroup -g 1001 -S appgroup && \
@@ -87,6 +87,8 @@ COPY --from=builder /var/www/html/routes ./routes
 COPY --from=builder /var/www/html/resources ./resources
 COPY --from=builder /var/www/html/config ./config
 COPY --from=builder /var/www/html/.env.production ./.env
+
+RUN mkdir -p database && touch database/database.sqlite
 
 RUN chown -R appuser:appgroup /var/www/html
 
