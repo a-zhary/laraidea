@@ -88,7 +88,7 @@ COPY --from=builder /var/www/html/resources ./resources
 COPY --from=builder /var/www/html/config ./config
 COPY --from=builder /var/www/html/.env.production ./.env
 
-RUN mkdir -p database && touch database/database.sqlite
+RUN mkdir -p /var/www/html/database
 
 RUN chown -R appuser:appgroup /var/www/html
 
@@ -96,4 +96,4 @@ USER appuser
 
 EXPOSE 8000
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+CMD ["sh", "-c", "touch /var/www/html/database/database.sqlite && php artisan serve --host=0.0.0.0 --port=8000"]
