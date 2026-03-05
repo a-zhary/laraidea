@@ -1,0 +1,31 @@
+services:
+  app:
+    build:
+      target: development
+    image: laraidea/app:dev
+    container_name: laraidea-app-dev
+    volumes:
+      - .:/var/www/html
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=laraidea
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+    command: >
+      sh -c "
+        echo 'Waiting for PostgreSQL...' &&
+        php artisan migrate --force 2>/dev/null || true &&
+        php artisan serve --host=0.0.0.0 --port=8000 &
+        npm run dev &
+        wait
+      "
+
+  postgres:
+    environment:
+      - POSTGRES_PASSWORD=postgres
